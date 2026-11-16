@@ -66,3 +66,44 @@ def calculate_metrics(y_true, y_pred, y_prob):
         "false_negative": fn,
         "true_positive": tp
     }
+
+def summarize_results(results):
+    
+
+    metrics = [
+        "accuracy",
+        "precision",
+        "sensitivity",
+        "specificity",
+        "f1_score",
+        "g_mean",
+        "roc_auc",
+        "mse",
+        "execution_time"
+    ]
+
+    summary = []
+
+    grouped = results.groupby([
+        "dataset",
+        "algorithm",
+        "smote"
+    ])
+
+    for (dataset, algorithm, smote), group in grouped:
+
+        row = {
+            "dataset": dataset,
+            "algorithm": algorithm,
+            "smote": smote
+        }
+
+        for metric in metrics:
+
+            row[f"{metric}_mean"] = group[metric].mean()
+
+            row[f"{metric}_std"] = group[metric].std()
+
+        summary.append(row)
+
+    return pd.DataFrame(summary)
