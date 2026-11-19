@@ -58,7 +58,7 @@ class BBOOptimizer:
         )
 
     def evaluate_population(self, population):
-      
+
         return np.array([
             self.objective_function(individual)
             for individual in population
@@ -75,22 +75,22 @@ class BBOOptimizer:
         max_species = max(self.population_size - 1, 1)
 
         immigration = MAX_IMMIGRATION * (
-            1 - species / max_species
+            species / max_species
         )
 
         emigration = MAX_EMIGRATION * (
-            species / max_species
+            1 - species / max_species
         )
 
         return immigration, emigration, species
 
     def migration_random_value(self):
- 
+
 
         if self.variant == "standard":
             return self.rng.uniform(0.0, 1.0)
 
-        
+
         u = self.rng.uniform(0.0, 1.0)
 
         lam = EXPONENTIAL_LAMBDA
@@ -100,7 +100,7 @@ class BBOOptimizer:
         ) / lam
 
     def select_donor(self, emigration):
-        
+
 
         total = np.sum(emigration)
 
@@ -122,7 +122,7 @@ class BBOOptimizer:
         immigration,
         emigration
     ):
-        
+
 
         new_population = population.copy()
 
@@ -145,7 +145,7 @@ class BBOOptimizer:
         return new_population
 
     def mutate(self, population, species):
-    
+
 
         new_population = population.copy()
 
@@ -169,7 +169,7 @@ class BBOOptimizer:
         return new_population
 
     def optimize(self):
-    
+
 
         population = self.initialize_population()
 
@@ -187,20 +187,20 @@ class BBOOptimizer:
                 self.calculate_migration_rates(fitness)
             )
 
-            
+
             new_population = self.migrate(
                 population,
                 immigration,
                 emigration
             )
 
-            
+
             new_population = self.mutate(
                 new_population,
                 species
             )
 
-            
+
             new_fitness = self.evaluate_population(new_population)
 
             current_best_index = np.argmin(new_fitness)
